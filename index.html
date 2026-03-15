@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Little Site ❤️</title>
+
+<style>
+
+body{
+margin:0;
+font-family:sans-serif;
+text-align:center;
+background:linear-gradient(135deg,#ffc0cb,#ffffff);
+overflow-x:hidden;
+}
+
+/* floating hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:float 8s linear infinite;
+color:#ff4d88;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-100vh)}
+}
+
+/* sections */
+
+.section{
+display:none;
+padding:20px;
+}
+
+.active{
+display:block;
+}
+
+/* buttons */
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:25px;
+font-size:18px;
+margin:10px;
+cursor:pointer;
+}
+
+#yes{
+background:#ff4d88;
+color:white;
+}
+
+#no{
+background:#999;
+color:white;
+}
+
+img{
+width:90%;
+max-width:420px;
+border-radius:20px;
+margin-top:30px;
+}
+
+.quote{
+font-size:18px;
+margin:20px;
+}
+
+#timer{
+font-size:28px;
+margin-top:30vh;
+}
+
+video{
+width:100%;
+max-height:45vh;
+object-fit:cover;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+.letter{
+max-width:600px;
+margin:auto;
+font-size:18px;
+line-height:1.6;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 0 10px pink;
+}
+
+.secret{
+font-size:14px;
+color:#666;
+margin-top:20px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<audio id="music" loop>
+<source src="music.mp3">
+</audio>
+
+
+<!-- PASSWORD PAGE -->
+
+<div id="gate" class="section active">
+
+<h2>Who you are?</h2>
+
+<input id="pass" type="password">
+
+<br><br>
+
+<button onclick="check()">Enter</button>
+
+</div>
+
+
+<!-- LOVE QUESTION -->
+
+<div id="love" class="section">
+
+<video autoplay muted loop>
+<source src="animation.mp4">
+</video>
+
+<h2>Do you love me? ❤️</h2>
+
+<button id="yes" onclick="celebrate()">Yes</button>
+
+<button id="no" onclick="grow()">No</button>
+
+</div>
+
+
+<!-- PHOTO PAGE -->
+
+<div id="photoPage" class="section">
+
+<h2>You ❤️</h2>
+
+<img id="photo">
+
+<div class="quote" id="quote"></div>
+
+<button onclick="showTimer()">Next</button>
+
+</div>
+
+
+<!-- TIMER PAGE -->
+
+<div id="timerPage" class="section">
+
+<h2>Our Time ❤️</h2>
+
+<div id="timer"></div>
+
+<div class="secret" onclick="showLetter()">
+psst... click here
+</div>
+
+</div>
+
+
+<!-- SECRET LOVE LETTER -->
+
+<div id="letterPage" class="section">
+
+<h2>A Letter For You ❤️</h2>
+
+<div class="letter">
+
+I know I don't always say things perfectly,  
+and sometimes I even mess up badly.
+
+But one thing has never changed —  
+how much you mean to me.
+
+Every moment with you has quietly become  
+one of the most important parts of my life.
+
+Your smile, your eyes, your presence —  
+they make ordinary days feel special.
+
+If I've hurt you, I truly regret it.  
+Not because I'm afraid of losing you,  
+but because you deserve to feel loved, safe,  
+and respected every single day.
+
+I promise to keep learning, improving,  
+and loving you better.
+
+Always.
+
+❤️
+
+</div>
+
+</div>
+
+
+<canvas id="confetti"></canvas>
+
+
+<script>
+
+/* PASSWORD */
+
+function check(){
+
+let p=document.getElementById("pass").value;
+
+if(p==="suar"){
+
+show("love");
+
+document.getElementById("music").play();
+
+}else{
+
+alert("Wrong answer 😏");
+
+}
+
+}
+
+
+/* PAGE SWITCH */
+
+function show(id){
+
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+
+}
+
+
+/* YES BUTTON GROWS */
+
+let size=18;
+
+function grow(){
+
+size+=8;
+
+document.getElementById("yes").style.fontSize=size+"px";
+
+}
+
+
+/* CONFETTI */
+
+const canvas=document.getElementById("confetti");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function celebrate(){
+
+for(let i=0;i<200;i++){
+
+pieces.push({
+
+x:Math.random()*canvas.width,
+
+y:Math.random()*canvas.height,
+
+r:Math.random()*6+2,
+
+d:Math.random()*5
+
+});
+
+}
+
+animate();
+
+setTimeout(()=>{
+
+loadRandomPhoto();
+
+show("photoPage");
+
+},2000);
+
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#ff4d88";
+
+pieces.forEach(p=>{
+
+ctx.beginPath();
+
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+
+ctx.fill();
+
+p.y+=p.d;
+
+if(p.y>canvas.height)p.y=0;
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+
+/* FLOATING HEARTS */
+
+setInterval(()=>{
+
+let heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.style.left=Math.random()*100+"vw";
+
+heart.innerHTML="❤️";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),8000);
+
+},500);
+
+
+/* RANDOM PHOTOS */
+
+const photos=[
+
+"IMG_001.jpg",
+"IMG_002.jpg",
+"smile.jpg",
+"cute.png",
+"her1.jpeg",
+"her2.jpg"
+
+];
+
+function loadRandomPhoto(){
+
+let randomPhoto=photos[Math.floor(Math.random()*photos.length)];
+
+document.getElementById("photo").src="photos/"+randomPhoto;
+
+}
+
+
+/* QUOTES */
+
+const quotes=[
+
+"Your eyes outshine the stars.",
+"Your smile rewrites my entire day.",
+"Poetry begins where your eyes start.",
+"Your hair flows like midnight silk.",
+"You glow without trying.",
+"You redefine elegance.",
+"Your beauty bends time.",
+"You make ordinary moments magical.",
+"Your eyes deserve sonnets.",
+"You are poetry walking."
+
+];
+
+let q=quotes[Math.floor(Math.random()*quotes.length)];
+
+document.getElementById("quote").innerText=q;
+
+
+/* TIMER */
+
+const start=new Date("2023-01-04T20:30:00+05:30");
+
+function update(){
+
+const now=new Date();
+
+const diff=now-start;
+
+const days=Math.floor(diff/86400000);
+
+const hours=Math.floor(diff%86400000/3600000);
+
+const minutes=Math.floor(diff%3600000/60000);
+
+const seconds=Math.floor(diff%60000/1000);
+
+document.getElementById("timer").innerText=
+
+days+" Days "+
+hours+" Hours "+
+minutes+" Minutes "+
+seconds+" Seconds ❤️";
+
+}
+
+setInterval(update,1000);
+
+update();
+
+function showTimer(){
+
+show("timerPage");
+
+}
+
+function showLetter(){
+
+show("letterPage");
+
+}
+
+</script>
+
+</body>
+</html>
