@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Our Little Site ❤️</title>
 
@@ -12,21 +13,6 @@ font-family:sans-serif;
 text-align:center;
 background:linear-gradient(135deg,#ffc0cb,#ffffff);
 overflow-x:hidden;
-}
-
-/* floating hearts */
-
-.heart{
-position:fixed;
-bottom:-20px;
-font-size:20px;
-animation:float 8s linear infinite;
-color:#ff4d88;
-}
-
-@keyframes float{
-0%{transform:translateY(0)}
-100%{transform:translateY(-100vh)}
 }
 
 /* sections */
@@ -59,7 +45,33 @@ color:white;
 #no{
 background:#999;
 color:white;
+position:absolute;
 }
+
+/* responsive video */
+
+video{
+width:90%;
+max-width:500px;
+border-radius:20px;
+margin-top:20px;
+}
+
+/* floating hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:18px;
+animation:float 8s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-100vh)}
+}
+
+/* image */
 
 img{
 width:90%;
@@ -68,28 +80,25 @@ border-radius:20px;
 margin-top:30px;
 }
 
+/* quote */
+
 .quote{
-font-size:18px;
+font-size:20px;
+background:rgba(255,255,255,0.7);
+padding:10px;
+border-radius:10px;
+display:inline-block;
 margin:20px;
 }
+
+/* timer */
 
 #timer{
 font-size:28px;
 margin-top:30vh;
 }
 
-video{
-width:100%;
-max-height:45vh;
-object-fit:cover;
-}
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-pointer-events:none;
-}
+/* letter */
 
 .letter{
 max-width:600px;
@@ -102,6 +111,8 @@ border-radius:20px;
 box-shadow:0 0 10px pink;
 }
 
+/* secret hint */
+
 .secret{
 font-size:14px;
 color:#666;
@@ -109,14 +120,26 @@ margin-top:20px;
 cursor:pointer;
 }
 
+/* confetti canvas */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
 </style>
+
 </head>
 
 
 <body>
 
-<audio id="music" loop>
-<source src="music.mp3">
+<!-- MUSIC -->
+
+<audio id="music" preload="auto" loop>
+<source src="music.mp3" type="audio/mpeg">
 </audio>
 
 
@@ -135,7 +158,7 @@ cursor:pointer;
 </div>
 
 
-<!-- LOVE QUESTION -->
+<!-- LOVE PAGE -->
 
 <div id="love" class="section">
 
@@ -147,7 +170,7 @@ cursor:pointer;
 
 <button id="yes" onclick="celebrate()">Yes</button>
 
-<button id="no" onclick="grow()">No</button>
+<button id="no">No</button>
 
 </div>
 
@@ -161,6 +184,8 @@ cursor:pointer;
 <img id="photo">
 
 <div class="quote" id="quote"></div>
+
+<br>
 
 <button onclick="showTimer()">Next</button>
 
@@ -182,7 +207,7 @@ psst... click here
 </div>
 
 
-<!-- SECRET LOVE LETTER -->
+<!-- SECRET LETTER -->
 
 <div id="letterPage" class="section">
 
@@ -190,25 +215,20 @@ psst... click here
 
 <div class="letter">
 
-I know I don't always say things perfectly,  
-and sometimes I even mess up badly.
+I know I don't always say things perfectly,
+and sometimes I mess up.
 
-But one thing has never changed —  
+But one thing has always stayed the same —
 how much you mean to me.
 
-Every moment with you has quietly become  
-one of the most important parts of my life.
-
-Your smile, your eyes, your presence —  
+Your smile, your eyes, your presence,
 they make ordinary days feel special.
 
-If I've hurt you, I truly regret it.  
-Not because I'm afraid of losing you,  
-but because you deserve to feel loved, safe,  
-and respected every single day.
+If I’ve hurt you, I truly regret it.
 
-I promise to keep learning, improving,  
-and loving you better.
+I promise to keep learning,
+keep growing,
+and keep loving you better.
 
 Always.
 
@@ -234,7 +254,9 @@ if(p==="suar"){
 
 show("love");
 
-document.getElementById("music").play();
+let music=document.getElementById("music");
+music.currentTime=0;
+music.play();
 
 }else{
 
@@ -256,15 +278,20 @@ document.getElementById(id).classList.add("active");
 }
 
 
-/* YES BUTTON GROWS */
+/* RUNNING AWAY NO BUTTON */
 
-let size=18;
+const noBtn=document.getElementById("no");
 
-function grow(){
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
 
-size+=8;
+function moveNo(){
 
-document.getElementById("yes").style.fontSize=size+"px";
+let x=Math.random()*(window.innerWidth-100);
+let y=Math.random()*(window.innerHeight-100);
+
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
 
 }
 
@@ -272,29 +299,22 @@ document.getElementById("yes").style.fontSize=size+"px";
 /* CONFETTI */
 
 const canvas=document.getElementById("confetti");
-
 const ctx=canvas.getContext("2d");
 
 canvas.width=window.innerWidth;
-
 canvas.height=window.innerHeight;
 
 let pieces=[];
 
 function celebrate(){
 
-for(let i=0;i<200;i++){
+for(let i=0;i<150;i++){
 
 pieces.push({
-
 x:Math.random()*canvas.width,
-
 y:Math.random()*canvas.height,
-
 r:Math.random()*6+2,
-
 d:Math.random()*5
-
 });
 
 }
@@ -304,7 +324,6 @@ animate();
 setTimeout(()=>{
 
 loadRandomPhoto();
-
 show("photoPage");
 
 },2000);
@@ -320,9 +339,7 @@ ctx.fillStyle="#ff4d88";
 pieces.forEach(p=>{
 
 ctx.beginPath();
-
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-
 ctx.fill();
 
 p.y+=p.d;
@@ -336,35 +353,31 @@ requestAnimationFrame(animate);
 }
 
 
-/* FLOATING HEARTS */
+/* FLOATING HEARTS (reduced frequency) */
 
 setInterval(()=>{
 
 let heart=document.createElement("div");
 
 heart.className="heart";
-
 heart.style.left=Math.random()*100+"vw";
-
 heart.innerHTML="❤️";
 
 document.body.appendChild(heart);
 
 setTimeout(()=>heart.remove(),8000);
 
-},500);
+},1800);
 
 
 /* RANDOM PHOTOS */
 
 const photos=[
 
-"IMG_001.jpg",
-"IMG_002.jpg",
-"smile.jpg",
-"cute.png",
-"her1.jpeg",
-"her2.jpg"
+"pic1.jpg",
+"pic2.jpg",
+"smile.png",
+"cute.jpeg"
 
 ];
 
@@ -387,10 +400,8 @@ const quotes=[
 "Your hair flows like midnight silk.",
 "You glow without trying.",
 "You redefine elegance.",
-"Your beauty bends time.",
 "You make ordinary moments magical.",
-"Your eyes deserve sonnets.",
-"You are poetry walking."
+"Your beauty bends time."
 
 ];
 
@@ -406,15 +417,11 @@ const start=new Date("2023-01-04T20:30:00+05:30");
 function update(){
 
 const now=new Date();
-
 const diff=now-start;
 
 const days=Math.floor(diff/86400000);
-
 const hours=Math.floor(diff%86400000/3600000);
-
 const minutes=Math.floor(diff%3600000/60000);
-
 const seconds=Math.floor(diff%60000/1000);
 
 document.getElementById("timer").innerText=
@@ -427,8 +434,8 @@ seconds+" Seconds ❤️";
 }
 
 setInterval(update,1000);
-
 update();
+
 
 function showTimer(){
 
