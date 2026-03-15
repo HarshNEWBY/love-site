@@ -48,7 +48,7 @@ color:white;
 position:absolute;
 }
 
-/* responsive video */
+/* responsive animation */
 
 video{
 width:90%;
@@ -71,7 +71,7 @@ animation:float 8s linear infinite;
 100%{transform:translateY(-100vh)}
 }
 
-/* image */
+/* photo */
 
 img{
 width:90%;
@@ -98,7 +98,7 @@ font-size:28px;
 margin-top:30vh;
 }
 
-/* letter */
+/* love letter */
 
 .letter{
 max-width:600px;
@@ -120,23 +120,12 @@ margin-top:20px;
 cursor:pointer;
 }
 
-/* confetti canvas */
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-pointer-events:none;
-}
-
 </style>
 
 </head>
 
-
 <body>
 
-<!-- MUSIC -->
 
 <audio id="music" preload="auto" loop>
 <source src="music.mp3" type="audio/mpeg">
@@ -158,7 +147,7 @@ pointer-events:none;
 </div>
 
 
-<!-- LOVE PAGE -->
+<!-- LOVE QUESTION -->
 
 <div id="love" class="section">
 
@@ -168,7 +157,7 @@ pointer-events:none;
 
 <h2>Do you love me? ❤️</h2>
 
-<button id="yes" onclick="celebrate()">Yes</button>
+<button id="yes" onclick="goPhoto()">Yes</button>
 
 <button id="no">No</button>
 
@@ -221,8 +210,8 @@ and sometimes I mess up.
 But one thing has always stayed the same —
 how much you mean to me.
 
-Your smile, your eyes, your presence,
-they make ordinary days feel special.
+Your smile, your eyes, your presence
+make ordinary days feel special.
 
 If I’ve hurt you, I truly regret it.
 
@@ -238,8 +227,6 @@ Always.
 
 </div>
 
-
-<canvas id="confetti"></canvas>
 
 
 <script>
@@ -278,7 +265,7 @@ document.getElementById(id).classList.add("active");
 }
 
 
-/* RUNNING AWAY NO BUTTON */
+/* NO BUTTON RUNS AWAY */
 
 const noBtn=document.getElementById("no");
 
@@ -296,101 +283,20 @@ noBtn.style.top=y+"px";
 }
 
 
-/* CONFETTI */
-
-const canvas=document.getElementById("confetti");
-const ctx=canvas.getContext("2d");
-
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let pieces=[];
-
-function celebrate(){
-
-for(let i=0;i<150;i++){
-
-pieces.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*6+2,
-d:Math.random()*5
-});
-
-}
-
-animate();
-
-setTimeout(()=>{
-
-loadRandomPhoto();
-show("photoPage");
-
-},2000);
-
-}
-
-function animate(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#ff4d88";
-
-pieces.forEach(p=>{
-
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fill();
-
-p.y+=p.d;
-
-if(p.y>canvas.height)p.y=0;
-
-});
-
-requestAnimationFrame(animate);
-
-}
-
-
-/* FLOATING HEARTS (reduced frequency) */
-
-setInterval(()=>{
-
-let heart=document.createElement("div");
-
-heart.className="heart";
-heart.style.left=Math.random()*100+"vw";
-heart.innerHTML="❤️";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),8000);
-
-},1800);
-
-
 /* RANDOM PHOTOS */
 
-const photos=[
-
-"pic1.jpg",
-"pic2.jpg",
-"smile.png",
-"cute.jpeg"
-
-];
+const totalPhotos = 50;   // change to your photo count
 
 function loadRandomPhoto(){
 
-let randomPhoto=photos[Math.floor(Math.random()*photos.length)];
+let randomNumber=Math.floor(Math.random()*totalPhotos)+1;
 
-document.getElementById("photo").src="photos/"+randomPhoto;
+document.getElementById("photo").src="photos/"+randomNumber+".jpg";
 
 }
 
 
-/* QUOTES */
+/* RANDOM QUOTES */
 
 const quotes=[
 
@@ -405,9 +311,26 @@ const quotes=[
 
 ];
 
+function loadQuote(){
+
 let q=quotes[Math.floor(Math.random()*quotes.length)];
 
 document.getElementById("quote").innerText=q;
+
+}
+
+
+/* YES BUTTON */
+
+function goPhoto(){
+
+loadRandomPhoto();
+
+loadQuote();
+
+show("photoPage");
+
+}
 
 
 /* TIMER */
@@ -425,7 +348,6 @@ const minutes=Math.floor(diff%3600000/60000);
 const seconds=Math.floor(diff%60000/1000);
 
 document.getElementById("timer").innerText=
-
 days+" Days "+
 hours+" Hours "+
 minutes+" Minutes "+
@@ -448,6 +370,24 @@ function showLetter(){
 show("letterPage");
 
 }
+
+
+/* FLOATING HEARTS (reduced) */
+
+setInterval(()=>{
+
+let heart=document.createElement("div");
+
+heart.className="heart";
+heart.style.left=Math.random()*100+"vw";
+heart.innerHTML="❤️";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),8000);
+
+},1800);
+
 
 </script>
 
