@@ -9,13 +9,11 @@
 
 body{
 margin:0;
-font-family:sans-serif;
+font-family:'Segoe UI',sans-serif;
 text-align:center;
 background:linear-gradient(135deg,#ffc0cb,#ffffff);
 overflow-x:hidden;
 }
-
-/* sections */
 
 .section{
 display:none;
@@ -25,8 +23,6 @@ padding:20px;
 .active{
 display:block;
 }
-
-/* buttons */
 
 button{
 padding:12px 25px;
@@ -40,15 +36,13 @@ cursor:pointer;
 #yes{
 background:#ff4d88;
 color:white;
+transition:0.3s;
 }
 
 #no{
 background:#999;
 color:white;
-position:absolute;
 }
-
-/* responsive animation */
 
 video{
 width:90%;
@@ -57,7 +51,52 @@ border-radius:20px;
 margin-top:20px;
 }
 
-/* floating hearts */
+img{
+width:90%;
+max-width:420px;
+border-radius:20px;
+margin-top:30px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+.quoteCard{
+
+max-width:420px;
+margin:25px auto;
+background:white;
+padding:20px;
+border-radius:18px;
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+font-size:19px;
+color:#d63384;
+font-style:italic;
+
+}
+
+#timer{
+font-size:28px;
+margin-top:30vh;
+}
+
+.letter{
+max-width:600px;
+margin:auto;
+font-size:18px;
+line-height:1.6;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 10px pink;
+}
+
+.secret{
+font-size:14px;
+color:#666;
+margin-top:20px;
+cursor:pointer;
+}
+
+/* hearts */
 
 .heart{
 position:fixed;
@@ -71,55 +110,6 @@ animation:float 8s linear infinite;
 100%{transform:translateY(-100vh)}
 }
 
-/* photo */
-
-img{
-width:90%;
-max-width:420px;
-border-radius:20px;
-margin-top:30px;
-}
-
-/* quote */
-
-.quote{
-font-size:20px;
-background:rgba(255,255,255,0.7);
-padding:10px;
-border-radius:10px;
-display:inline-block;
-margin:20px;
-}
-
-/* timer */
-
-#timer{
-font-size:28px;
-margin-top:30vh;
-}
-
-/* love letter */
-
-.letter{
-max-width:600px;
-margin:auto;
-font-size:18px;
-line-height:1.6;
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 0 10px pink;
-}
-
-/* secret hint */
-
-.secret{
-font-size:14px;
-color:#666;
-margin-top:20px;
-cursor:pointer;
-}
-
 </style>
 
 </head>
@@ -128,11 +118,11 @@ cursor:pointer;
 
 
 <audio id="music" preload="auto" loop>
-<source src="music.mp3" type="audio/mpeg">
+<source src="music.mp3">
 </audio>
 
 
-<!-- PASSWORD PAGE -->
+<!-- PASSWORD -->
 
 <div id="gate" class="section active">
 
@@ -147,7 +137,7 @@ cursor:pointer;
 </div>
 
 
-<!-- LOVE QUESTION -->
+<!-- LOVE PAGE -->
 
 <div id="love" class="section">
 
@@ -158,8 +148,7 @@ cursor:pointer;
 <h2>Do you love me? ❤️</h2>
 
 <button id="yes" onclick="goPhoto()">Yes</button>
-
-<button id="no">No</button>
+<button id="no" onclick="grow()">No</button>
 
 </div>
 
@@ -172,9 +161,7 @@ cursor:pointer;
 
 <img id="photo">
 
-<div class="quote" id="quote"></div>
-
-<br>
+<div class="quoteCard" id="quote"></div>
 
 <button onclick="showTimer()">Next</button>
 
@@ -189,14 +176,12 @@ cursor:pointer;
 
 <div id="timer"></div>
 
-<div class="secret" onclick="showLetter()">
-psst... click here
-</div>
+<div class="secret" onclick="showLetter()">psst... click here</div>
 
 </div>
 
 
-<!-- SECRET LETTER -->
+<!-- LETTER -->
 
 <div id="letterPage" class="section">
 
@@ -204,29 +189,26 @@ psst... click here
 
 <div class="letter">
 
-I know I don't always say things perfectly,
-and sometimes I mess up.
+I know I don't always say things perfectly.
 
-But one thing has always stayed the same —
+Sometimes I mess up.
+
+But one thing never changes —  
 how much you mean to me.
 
-Your smile, your eyes, your presence
+Your smile, your eyes, your presence  
 make ordinary days feel special.
 
 If I’ve hurt you, I truly regret it.
 
-I promise to keep learning,
-keep growing,
-and keep loving you better.
+I promise to keep learning  
+and loving you better.
 
-Always.
-
-❤️
+Always ❤️
 
 </div>
 
 </div>
-
 
 
 <script>
@@ -241,9 +223,7 @@ if(p==="suar"){
 
 show("love");
 
-let music=document.getElementById("music");
-music.currentTime=0;
-music.play();
+document.getElementById("music").play();
 
 }else{
 
@@ -265,38 +245,30 @@ document.getElementById(id).classList.add("active");
 }
 
 
-/* NO BUTTON RUNS AWAY */
+/* YES BUTTON GROWS */
 
-const noBtn=document.getElementById("no");
+let size=18;
 
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("touchstart",moveNo);
+function grow(){
 
-function moveNo(){
+size+=6;
 
-let x=Math.random()*(window.innerWidth-100);
-let y=Math.random()*(window.innerHeight-100);
-
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
+document.getElementById("yes").style.fontSize=size+"px";
 
 }
 
 
-/* RANDOM PHOTOS */
+/* PHOTOS */
 
-const totalPhotos = 50;   // change to your photo count
+const totalPhotos = 50;
 
-function loadRandomPhoto(){
+let photoOrder=[...Array(totalPhotos).keys()].map(x=>x+1);
+shuffle(photoOrder);
 
-let randomNumber=Math.floor(Math.random()*totalPhotos)+1;
-
-document.getElementById("photo").src="photos/"+randomNumber+".jpg";
-
-}
+let photoIndex=0;
 
 
-/* RANDOM QUOTES */
+/* QUOTES */
 
 const quotes=[
 
@@ -307,26 +279,90 @@ const quotes=[
 "You glow without trying.",
 "You redefine elegance.",
 "You make ordinary moments magical.",
-"Your beauty bends time."
+"Your beauty bends time.",
+"Your eyes deserve sonnets.",
+"You are poetry walking.",
+"Your laughter is my favorite sound.",
+"You turn simple moments into magic.",
+"Your presence brightens every room.",
+"Even the moon envies your glow.",
+"Your charm is irresistible.",
+"Your beauty feels timeless.",
+"Your eyes hold galaxies.",
+"You are art in human form.",
+"You make the world softer.",
+"You shine brighter than stars.",
+"Your smile melts my worries.",
+"You are pure magic.",
+"Your grace is unforgettable.",
+"You make love feel effortless.",
+"You brighten every day.",
+"Your voice feels like music.",
+"You are mesmerizing.",
+"You make my world colorful.",
+"Your kindness is beautiful.",
+"You light up everything.",
+"Your smile is sunshine.",
+"You are poetry alive.",
+"You inspire every heartbeat.",
+"Your beauty is beyond words.",
+"You are unforgettable.",
+"You make moments golden.",
+"You glow with happiness.",
+"You bring peace to my heart.",
+"You make everything better.",
+"You sparkle naturally.",
+"You are stunning always.",
+"You are effortlessly beautiful.",
+"You make the ordinary magical.",
+"You shine inside and out.",
+"You are breathtaking.",
+"You make my heart calm.",
+"You radiate warmth.",
+"You are a dream.",
+"You are simply perfect.",
+"You are my favorite view."
 
 ];
 
-function loadQuote(){
+let quoteOrder=[...Array(50).keys()];
+shuffle(quoteOrder);
 
-let q=quotes[Math.floor(Math.random()*quotes.length)];
+let quoteIndex=0;
 
-document.getElementById("quote").innerText=q;
 
+/* SHUFFLE FUNCTION */
+
+function shuffle(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[array[i],array[j]]=[array[j],array[i]];
+}
 }
 
 
-/* YES BUTTON */
+/* SHOW PHOTO */
 
 function goPhoto(){
 
-loadRandomPhoto();
+let photoNum=photoOrder[photoIndex];
+let quoteNum=quoteOrder[quoteIndex];
 
-loadQuote();
+document.getElementById("photo").src="photos/"+photoNum+".jpg";
+document.getElementById("quote").innerText=quotes[quoteNum];
+
+photoIndex++;
+quoteIndex++;
+
+if(photoIndex>=totalPhotos){
+shuffle(photoOrder);
+photoIndex=0;
+}
+
+if(quoteIndex>=50){
+shuffle(quoteOrder);
+quoteIndex=0;
+}
 
 show("photoPage");
 
@@ -360,19 +396,15 @@ update();
 
 
 function showTimer(){
-
 show("timerPage");
-
 }
 
 function showLetter(){
-
 show("letterPage");
-
 }
 
 
-/* FLOATING HEARTS (reduced) */
+/* HEARTS */
 
 setInterval(()=>{
 
@@ -386,8 +418,7 @@ document.body.appendChild(heart);
 
 setTimeout(()=>heart.remove(),8000);
 
-},1800);
-
+},2000);
 
 </script>
 
