@@ -60,7 +60,6 @@ box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
 .quoteCard{
-
 max-width:420px;
 margin:25px auto;
 background:white;
@@ -70,7 +69,6 @@ box-shadow:0 10px 20px rgba(0,0,0,0.15);
 font-size:19px;
 color:#d63384;
 font-style:italic;
-
 }
 
 #timer{
@@ -174,8 +172,6 @@ animation:float 8s linear infinite;
 
 <h2>Our Time ❤️</h2>
 
-<h1> I love you.. and I'll always will</h1>
-
 <div id="timer"></div>
 
 <div class="secret" onclick="showLetter()">psst... click here</div>
@@ -189,26 +185,7 @@ animation:float 8s linear infinite;
 
 <h2>A Letter For You ❤️</h2>
 
-<div class="letter">
-
-I know I don't always say things perfectly.
-
-Sometimes I mess up.
-
-But one thing never changes —  
-how much you mean to me.
-
-Your smile, your eyes, your presence  
-make ordinary days feel special.
-
-If I’ve hurt you, I truly regret it.
-
-I promise to keep learning  
-and loving you better.
-
-Always ❤️
-
-</div>
+<div class="letter" id="letterText"></div>
 
 </div>
 
@@ -260,9 +237,19 @@ document.getElementById("yes").style.fontSize=size+"px";
 }
 
 
+/* SHUFFLE FUNCTION */
+
+function shuffle(array){
+for(let i=array.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[array[i],array[j]]=[array[j],array[i]];
+}
+}
+
+
 /* PHOTOS */
 
-const totalPhotos = 50;
+const totalPhotos=50;
 
 let photoOrder=[...Array(totalPhotos).keys()].map(x=>x+1);
 shuffle(photoOrder);
@@ -327,20 +314,42 @@ const quotes=[
 
 ];
 
-let quoteOrder=[...Array(50).keys()];
+let quoteOrder=[...Array(quotes.length).keys()];
 shuffle(quoteOrder);
 
 let quoteIndex=0;
 
 
-/* SHUFFLE FUNCTION */
+/* LOVE LETTERS */
 
-function shuffle(array){
-for(let i=array.length-1;i>0;i--){
-const j=Math.floor(Math.random()*(i+1));
-[array[i],array[j]]=[array[j],array[i]];
-}
-}
+const letters=[
+
+"I may not always say things perfectly, but you mean more to me than I can explain.",
+
+"You have a way of making ordinary moments feel beautiful.",
+
+"Sometimes I look at you and wonder how I got so lucky.",
+
+"Your smile alone can make my entire day better.",
+
+"You’re the kind of person that makes life feel lighter.",
+
+"Even when I mess up, my heart always comes back to you.",
+
+"Being around you feels like home.",
+
+"You make the world feel calmer just by being in it.",
+
+"Every little thing about you matters to me.",
+
+"If I had to choose again, I would still choose you."
+
+];
+
+let letterOrder=[...Array(letters.length).keys()];
+shuffle(letterOrder);
+
+let letterIndex=0;
 
 
 /* SHOW PHOTO */
@@ -361,12 +370,32 @@ shuffle(photoOrder);
 photoIndex=0;
 }
 
-if(quoteIndex>=50){
+if(quoteIndex>=quotes.length){
 shuffle(quoteOrder);
 quoteIndex=0;
 }
 
 show("photoPage");
+
+}
+
+
+/* SHOW LETTER */
+
+function showLetter(){
+
+let letterNum=letterOrder[letterIndex];
+
+document.getElementById("letterText").innerText=letters[letterNum];
+
+letterIndex++;
+
+if(letterIndex>=letters.length){
+shuffle(letterOrder);
+letterIndex=0;
+}
+
+show("letterPage");
 
 }
 
@@ -399,10 +428,6 @@ update();
 
 function showTimer(){
 show("timerPage");
-}
-
-function showLetter(){
-show("letterPage");
 }
 
 
